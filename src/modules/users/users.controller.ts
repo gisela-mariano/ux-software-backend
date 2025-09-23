@@ -1,3 +1,4 @@
+import { Public } from "@/shared/decorators/isPublic.decorator";
 import { CreateUserDTO } from "@modules/users/dtos/user.dto";
 import { UsersService } from "@modules/users/users.service";
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
@@ -6,6 +7,7 @@ import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
+  @Public()
   @Post()
   async create(@Body() payload: CreateUserDTO) {
     const data = await this.userService.create(payload);

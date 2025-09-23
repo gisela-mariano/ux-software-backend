@@ -1,5 +1,12 @@
 import { ApiResponse } from "@/shared/interfaces/apiResponse.interface";
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from "@nestjs/common";
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from "@nestjs/common";
 import { Response } from "express";
 
 interface ErrorResponse {
@@ -38,6 +45,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else if (exception instanceof Error) {
       message = exception.message;
       errors = [exception.message];
+
+      Logger.error(exception.stack);
     }
 
     const responseBody: ApiResponse<null> = {

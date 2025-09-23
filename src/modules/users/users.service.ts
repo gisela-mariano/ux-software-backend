@@ -36,6 +36,16 @@ export class UsersService {
     return user;
   }
 
+  async fetchByEmail(email: string, throwError = false): Promise<UserInDb | null> {
+    const user = await this.usersRepository.findOneBy({ email });
+
+    if (!user && throwError) {
+      throw new NotFoundException(`User with id ${email} not found`);
+    }
+
+    return user;
+  }
+
   async verifyAlreadyRegisteredByEmail(email: string): Promise<void> {
     const user = await this.usersRepository.findOneBy({ email });
 
