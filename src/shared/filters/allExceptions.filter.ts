@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/shared/interfaces/apiResponse.interface";
+import { BaseApiResponse } from "@/shared/interfaces/apiResponse.interface";
 import {
   ArgumentsHost,
   Catch,
@@ -49,7 +49,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       Logger.error(exception.stack);
     }
 
-    const responseBody: ApiResponse<null> = {
+    const responseBody: BaseApiResponse<null> = {
       status,
       message,
       data: null,

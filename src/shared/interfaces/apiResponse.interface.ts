@@ -1,4 +1,4 @@
-export interface ApiResponse<T = any> {
+export interface BaseApiResponse<T> {
   status: number;
   message: string;
   data: T | null;
