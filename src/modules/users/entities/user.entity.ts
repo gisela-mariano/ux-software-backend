@@ -1,6 +1,7 @@
+import { ProductEntity } from "@modules/products/entities/product.entity";
 import { UserRole } from "@modules/users/dtos/user.dto";
 import { BaseEntity } from "@shared/entities/base.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 
 @Entity({ name: "users" })
 export class UserEntity extends BaseEntity {
@@ -15,4 +16,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ type: "enum", enum: UserRole, array: true, default: [UserRole.CLIENT] })
   roles: UserRole[];
+
+  @OneToMany(() => ProductEntity, (product) => product.user)
+  products: ProductEntity[];
 }
