@@ -1,3 +1,4 @@
+import { CartEntity } from "@modules/carts/entities/cart.entity";
 import { ProductEntity } from "@modules/products/entities/product.entity";
 import { UserRole } from "@modules/users/dtos/user.dto";
 import { BaseEntity } from "@shared/entities/base.entity";
@@ -16,6 +17,9 @@ export class UserEntity extends BaseEntity {
 
   @Column({ type: "enum", enum: UserRole, array: true, default: [UserRole.CLIENT] })
   roles: UserRole[];
+
+  @OneToMany(() => CartEntity, (cart) => cart.user)
+  carts: CartEntity[];
 
   @OneToMany(() => ProductEntity, (product) => product.user)
   products: ProductEntity[];

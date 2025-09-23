@@ -1,6 +1,7 @@
 import { DatabaseModule } from "@/infra/database/database.module";
 import { JwtAuthGuard } from "@/modules/auth/guards/jwtAuth.guard";
 import { AuthModule } from "@modules/auth/auth.module";
+import { CartsModule } from "@modules/carts/carts.module";
 import { ProductsModule } from "@modules/products/products.module";
 import { UsersModule } from "@modules/users/users.module";
 import { Module } from "@nestjs/common";
@@ -16,6 +17,7 @@ import path from "path";
     UsersModule,
     AuthModule,
     ProductsModule,
+    CartsModule,
   ],
   controllers: [],
   providers: [
