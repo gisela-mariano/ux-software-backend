@@ -1,6 +1,6 @@
 import { BaseInDbDTO } from "@/shared/dtos/base.dto";
 import { strongPasswordRegex } from "@/utils/regex";
-import { IntersectionType, OmitType } from "@nestjs/swagger";
+import { ApiProperty, IntersectionType, OmitType } from "@nestjs/swagger";
 import {
   ArrayNotEmpty,
   IsArray,
@@ -39,9 +39,10 @@ export class UserInDb extends IntersectionType(BaseUserDTO, BaseInDbDTO) {
 export class UserInDbResponse extends OmitType(UserInDb, ["passwordHash"] as const) {}
 
 export class CreateUserDTO extends OmitType(BaseUserDTO, ["roles"] as const) {
-  /**
-   * Password must have at least 8 characters, one letter, one number and one special character
-   */
+  @ApiProperty({
+    description:
+      "Password must have at least 8 characters, one letter, one number and one special character",
+  })
   @IsString({ message: "password must be a string" })
   @IsNotEmpty({ message: "password should not be empty" })
   @Matches(strongPasswordRegex, {

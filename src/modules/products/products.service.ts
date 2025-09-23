@@ -1,8 +1,9 @@
-import { Pagination } from "@/shared/interfaces/routeParams.interface";
+import { PaginationDTO } from "@/shared/dtos/routeParams.dto";
+import { DefaultPagination } from "@/shared/interfaces/routeParams.interface";
 import {
   CreateProductDTO,
   ProductInDb,
-  ProductInJoinUserDb,
+  ProductInDbJoinUser,
   UpdateProductDTO,
 } from "@modules/products/dtos/product.dto";
 import { ProductEntity } from "@modules/products/entities/product.entity";
@@ -37,23 +38,27 @@ export class ProductsService {
     return this.productsRepository.save(payload);
   }
 
-  async fetchById(id: string): Promise<ProductInJoinUserDb | null> {
-    const product = await this.productsRepository.find({
+  async fetchById(id: string, throwError = false): Promise<ProductInDbJoinUser | null> {
+    const product = await this.productsRepository.findOne({
       where: { id },
       relations: { user: true },
     });
 
-    return product && product.length ? product[0] : null;
+    if (!product && throwError) {
+      throw new NotFoundException(`Product with id ${id} not found`);
+    }
+
+    return product;
   }
 
-  async fetchAll(params?: Pagination): Promise<ProductInJoinUserDb[]> {
-    const { limit = 10, offset = 0 } = params ?? {};
+  async fetchAll(params?: PaginationDTO): Promise<ProductInDbJoinUser[]> {
+    const { limit = DefaultPagination.LIMIT, page = DefaultPagination.PAGE } = params ?? {};
 
     const products = await this.productsRepository.find({
       relations: {
         user: true,
       },
-      skip: offset * limit,
+      skip: page * limit,
       take: limit,
     });
 

@@ -4,12 +4,13 @@ import {
 } from "@/shared/decorators/apiResponse.decorator";
 import { Public } from "@/shared/decorators/isPublic.decorator";
 import { Roles } from "@/shared/decorators/roles.decorator";
+import { PaginationDTO } from "@/shared/dtos/routeParams.dto";
 import { PermissionGuard } from "@/shared/guards/permission.guard";
 import type { TokenBuffer } from "@modules/auth/interfaces/auth.interface";
 import {
   CreateProductDTO,
   ProductInDb,
-  ProductInJoinUserDb,
+  ProductInDbJoinUser,
   UpdateProductDTO,
 } from "@modules/products/dtos/product.dto";
 import { ProductsService } from "@modules/products/products.service";
@@ -27,7 +28,6 @@ import {
 } from "@nestjs/common";
 import { ApiBody, ApiHeader } from "@nestjs/swagger";
 import { CurrentUser } from "@shared/decorators/currentUser.decorator";
-import type { Pagination } from "@shared/interfaces/routeParams.interface";
 
 @Controller("products")
 export class ProductsController {
@@ -48,7 +48,7 @@ export class ProductsController {
     };
   }
 
-  @ApiSuccessResponseWrapped(ProductInJoinUserDb)
+  @ApiSuccessResponseWrapped(ProductInDbJoinUser)
   @Public()
   @Get("/:id")
   async getById(@Param("id") id: string) {
@@ -60,10 +60,10 @@ export class ProductsController {
     };
   }
 
-  @ApiSuccessResponseWrapped([ProductInJoinUserDb])
+  @ApiSuccessResponseWrapped([ProductInDbJoinUser])
   @Public()
   @Get()
-  async getAll(@Query() params: Pagination) {
+  async getAll(@Query() params: PaginationDTO) {
     const data = await this.productsService.fetchAll(params);
 
     return {

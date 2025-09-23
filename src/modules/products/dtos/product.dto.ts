@@ -10,7 +10,7 @@ export class BaseProductDTO {
 
   @IsNumber({}, { message: "price must be a number" })
   @IsNotEmpty({ message: "price should not be empty" })
-  @Min(0, { message: "price must be greater than 0" })
+  @Min(1, { message: "price must be greater than 0" })
   price: number;
 
   @IsArray({ message: "imageUrls must be an array" })
@@ -31,6 +31,6 @@ export class SaveProductInDbDTO extends BaseProductDTO {
 
 export class UpdateProductDTO extends PartialType(CreateProductDTO) {}
 
-export class ProductInJoinUserDb extends IntersectionType(BaseProductDTO, BaseInDbDTO) {
+export class ProductInDbJoinUser extends ProductInDb {
   user: UserInDb;
 }

@@ -1,4 +1,4 @@
-export interface Pagination {
-  limit: number;
-  offset: number;
+export enum DefaultPagination {
+  LIMIT = 10,
+  PAGE = 0,
 }
