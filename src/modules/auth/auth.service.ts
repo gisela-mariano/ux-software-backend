@@ -13,7 +13,7 @@ export class AuthService {
   ) {}
 
   async login({ email, password }: LoginDTO): Promise<LoginResponseDTO> {
-    const user = await this.userService.fetchByEmail(email);
+    const user = await this.userService.fetchByEmail(email, false, true);
 
     if (!user) throw new UnauthorizedException("Invalid credentials");
 
@@ -21,7 +21,7 @@ export class AuthService {
 
     if (!isMatch) throw new UnauthorizedException("Invalid credentials");
 
-    const payload: TokenBuffer = { sub: user.id, email: user.email };
+    const payload: TokenBuffer = { sub: user.id, email: user.email, roles: user.roles };
 
     return {
       accessToken: this.jwtService.sign(payload),

@@ -12,7 +12,7 @@ export class JwtAuthGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): boolean {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -23,11 +23,11 @@ export class JwtAuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("No token provided");
     }
 
     try {
-      const payload: TokenBuffer = await this.jwtService.verifyAsync(token, {
+      const payload: TokenBuffer = this.jwtService.verify(token, {
         secret: process.env.SECRET_KEY,
       });
 

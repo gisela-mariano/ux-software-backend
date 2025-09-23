@@ -1,7 +1,15 @@
 import { BaseInDbDTO } from "@/shared/dtos/base.dto";
 import { strongPasswordRegex } from "@/utils/regex";
 import { IntersectionType, OmitType } from "@nestjs/swagger";
-import { IsArray, IsNotEmpty, IsString, Matches } from "class-validator";
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  Matches,
+} from "class-validator";
 
 export enum UserRole {
   ADMIN = "admin",
@@ -15,11 +23,13 @@ export class BaseUserDTO {
 
   @IsString({ message: "email must be a string" })
   @IsNotEmpty({ message: "email should not be empty" })
+  @IsEmail({}, { message: "email must be a valid email" })
   email: string;
 
-  @IsArray({ message: "role must be an array" })
-  @IsNotEmpty({ message: "role should not be empty" })
-  role: UserRole[];
+  @IsArray({ message: "roles must be an array" })
+  @IsNotEmpty({ message: "roles should not be empty" })
+  @ArrayNotEmpty({ message: "roles array should not be empty" })
+  roles: UserRole[];
 }
 
 export class UserInDb extends IntersectionType(BaseUserDTO, BaseInDbDTO) {
@@ -28,7 +38,7 @@ export class UserInDb extends IntersectionType(BaseUserDTO, BaseInDbDTO) {
 
 export class UserInDbResponse extends OmitType(UserInDb, ["passwordHash"] as const) {}
 
-export class CreateUserDTO extends OmitType(BaseUserDTO, ["role"] as const) {
+export class CreateUserDTO extends OmitType(BaseUserDTO, ["roles"] as const) {
   /**
    * Password must have at least 8 characters, one letter, one number and one special character
    */
@@ -39,4 +49,12 @@ export class CreateUserDTO extends OmitType(BaseUserDTO, ["role"] as const) {
       "Password must have at least 8 characters, one letter, one number and one special character",
   })
   password: string;
+}
+
+export class UpdateUseRolesDTO {
+  @IsArray({ message: "roles must be an array" })
+  @IsNotEmpty({ message: "roles should not be empty" })
+  @ArrayNotEmpty({ message: "roles array should not be empty" })
+  @IsEnum(UserRole, { each: true, message: "roles must be a valid enum" })
+  roles: UserRole[];
 }

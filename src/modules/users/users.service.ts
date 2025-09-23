@@ -1,5 +1,5 @@
 import { AlreadyRegisteredException } from "@/exceptions";
-import { CreateUserDTO, UserInDb } from "@modules/users/dtos/user.dto";
+import { CreateUserDTO, UserInDb, UserInDbResponse, UserRole } from "@modules/users/dtos/user.dto";
 import { UserEntity } from "@modules/users/entities/user.entity";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -13,7 +13,7 @@ export class UsersService {
     private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
-  async create(createUser: CreateUserDTO): Promise<UserInDb> {
+  async create(createUser: CreateUserDTO): Promise<UserInDbResponse> {
     await this.verifyAlreadyRegisteredByEmail(createUser.email);
 
     const passwordHash = await hash(createUser.password, 10);
@@ -23,10 +23,10 @@ export class UsersService {
       passwordHash,
     });
 
-    return this.dataToUserResponse(user);
+    return user;
   }
 
-  async fetchById(id: string, throwError = false): Promise<UserInDb | null> {
+  async fetchById(id: string, throwError = false): Promise<UserInDbResponse | null> {
     const user = await this.usersRepository.findOneBy({ id });
 
     if (!user && throwError) {
@@ -36,8 +36,18 @@ export class UsersService {
     return user;
   }
 
-  async fetchByEmail(email: string, throwError = false): Promise<UserInDb | null> {
-    const user = await this.usersRepository.findOneBy({ email });
+  async fetchByEmail(
+    email: string,
+    throwError = false,
+    withPassword = false,
+  ): Promise<UserInDb | null> {
+    const user = withPassword
+      ? await this.usersRepository
+          .createQueryBuilder("user")
+          .addSelect("user.passwordHash")
+          .where("user.email = :email", { email })
+          .getOne()
+      : await this.usersRepository.findOne({ where: { email } });
 
     if (!user && throwError) {
       throw new NotFoundException(`User with id ${email} not found`);
@@ -46,20 +56,24 @@ export class UsersService {
     return user;
   }
 
-  async verifyAlreadyRegisteredByEmail(email: string): Promise<void> {
+  async updateUserRoles(id: string, roles: UserRole[]): Promise<UserInDbResponse> {
+    await this.fetchById(id, true);
+
+    const user = await this.usersRepository.preload({
+      id,
+      roles,
+    });
+
+    const result = await this.usersRepository.save(user!);
+
+    return result;
+  }
+
+  private async verifyAlreadyRegisteredByEmail(email: string): Promise<void> {
     const user = await this.usersRepository.findOneBy({ email });
 
     if (user) {
       throw new AlreadyRegisteredException(`User with email ${email} already registered`);
     }
-  }
-
-  private dataToUserResponse(data: UserEntity): UserInDb {
-    const user: { password?: string; passwordHash?: string } = data;
-
-    if (user.password) delete user.password;
-    if (user.passwordHash) delete user.passwordHash;
-
-    return user as unknown as UserInDb;
   }
 }
