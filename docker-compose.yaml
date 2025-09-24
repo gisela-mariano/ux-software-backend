@@ -1,6 +1,18 @@
 # version: '3.9'
 
 services:
+  api:
+    build: .
+    container_name: ux-software-api
+    restart: unless-stopped
+    ports:
+      - ${API_PORT}:3000
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
   db:
     image: postgres:17.6
     container_name: ux-software-db-postgres
@@ -16,5 +28,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
+  redis:
+    image: redis:7.4
+    container_name: ux-software-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - redis_data:/data
+
 volumes:
   postgres_data:
+  redis_data:
