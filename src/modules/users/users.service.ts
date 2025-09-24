@@ -1,4 +1,5 @@
 import { AlreadyRegisteredException } from "@/exceptions";
+import { OtpService } from "@/infra/otp/otp.service";
 import { CreateUserDTO, UserInDb, UserInDbResponse, UserRole } from "@modules/users/dtos/user.dto";
 import { UserEntity } from "@modules/users/entities/user.entity";
 import { Injectable, NotFoundException } from "@nestjs/common";
@@ -11,6 +12,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly usersRepository: Repository<UserEntity>,
+    private readonly otpService: OtpService,
   ) {}
 
   async create(createUser: CreateUserDTO): Promise<UserInDbResponse> {
@@ -22,6 +24,13 @@ export class UsersService {
       ...createUser,
       passwordHash,
     });
+
+    if (user) {
+      await this.otpService.sendOtp({
+        email: user.email,
+        name: user.name,
+      });
+    }
 
     return user;
   }
