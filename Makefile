@@ -81,6 +81,10 @@ docker-up-build:
 	@echo "🐳 Subindo containers..."
 	docker compose up --build -d
 
+docker-up-db-redis:
+	@echo "🐳 Subindo containers db e redis..."
+	docker-compose up db redis -d
+
 # Derrubar containers
 docker-down:
 	@echo "🛑 Derrubando containers..."

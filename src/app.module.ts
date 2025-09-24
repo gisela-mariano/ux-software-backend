@@ -20,7 +20,7 @@ import path from "path";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: path.resolve(__dirname, "../.env") }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: path.resolve(process.cwd(), "./.env") }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
