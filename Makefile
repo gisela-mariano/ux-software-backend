@@ -63,7 +63,7 @@ build:
 	npm run build
 
 # Testes
-test:
+run-test:
 	@echo "🧪 Rodando testes..."
 	npm run test
 
