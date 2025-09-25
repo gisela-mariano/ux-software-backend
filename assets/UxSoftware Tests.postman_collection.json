@@ -1,0 +1,762 @@
+{
+	"info": {
+		"_postman_id": "9bee1e01-0f42-4929-8d67-21f6a881fc3a",
+		"name": "UxSoftware Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48088123",
+		"_collection_link": "https://giselamariano8-92535.postman.co/workspace/Gisela-Mariano's-Workspace~9381a448-de96-43bf-8942-eb0431477bf4/collection/48088123-9bee1e01-0f42-4929-8d67-21f6a881fc3a?action=share&source=collection_link&creator=48088123"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {\r",
+									"  const user = pm.response.json().data\r",
+									"\r",
+									"  pm.environment.set(\"idUser1\", user.id)\r",
+									"  pm.environment.set(\"emailUser1\", user.email)\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"email\": \"johndoe@mail.com\",\r\n  \"password\": \"SenhaForte@1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}/{{idUser1}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}",
+								"{{idUser1}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User By Id Sem Token",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjhjZTg5Mi1mNzY2LTQyZDktODE0Yi0wZDE3NDI5ZTc4OTEiLCJlbWFpbCI6ImphbmVkb2VAbWFpbC5jb20iLCJyb2xlcyI6WyJhZG1pbiJdLCJpYXQiOjE3NTg2NTA4MjIsImV4cCI6MTc1ODczNzIyMn0.BQLM57r0nBR69tXTWI1i4migjDEpklPA2gJrGS3MjJk",
+										"description": "Token invalido",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/{{context}}/4b8ce892-f766-42d9-814b-0d17429e7891",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{context}}",
+										"4b8ce892-f766-42d9-814b-0d17429e7891"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Update User Roles",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser2}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"roles\": [\"admin\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.environment.set(\"context\", \"users\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"  const token = pm.response.json().data.accessToken\r",
+									"\r",
+									"  pm.environment.set(\"authTokenUser1\", token)\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"johndoe@mail.com\",\r\n  \"password\": \"SenhaForte@1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Email Errado",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"janedoeErado@mail.com\",\r\n  \"password\": \"SenhaForte@1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{context}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{context}}",
+										"login"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 401,\n    \"message\": \"Unauthorized\",\n    \"data\": null,\n    \"error\": true,\n    \"errors\": [\n        \"Invalid credentials\"\n    ]\n}"
+						},
+						{
+							"name": "Login Cerrto",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"janedoe@mail.com\",\r\n  \"password\": \"SenhaForte@1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{context}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{context}}",
+										"login"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Login Senha Errada",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"janedoe@mail.com\",\r\n  \"password\": \"SenhaForte@1Errada\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{context}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{context}}",
+										"login"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.environment.set(\"context\", \"auth\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "OTP",
+			"item": [
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}/verify/{{emailUser1}}/949362",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}",
+								"verify",
+								"{{emailUser1}}",
+								"949362"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							"pm.environment.set(\"context\", \"otp\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Create Product User 1 (Cliente)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"To Delete\",\r\n  \"price\": 829.90,\r\n  \"imageUrls\": [],\r\n  \"description\": \"Some description\"\r\n}\r\n// [\r\n//   {\r\n//     \"name\": \"Monitor UltraWide\",\r\n//     \"price\": 829.90,\r\n//     \"imageUrls\": [\r\n//       \"https://m.media-amazon.com/images/I/51hgjdOoxxL._AC_SL1000_.jpg\"\r\n//     ],\r\n//     \"description\": \"Monitor Gamer LG UltraWide\"\r\n//   },\r\n//   {\r\n//     \"name\": \"Echo Dot\",\r\n//     \"price\": 499.44,\r\n//     \"imageUrls\": [\r\n//       \"https://m.media-amazon.com/images/I/61M+bgGo7VL._AC_SL1000_.jpg\",\r\n//       \"https://m.media-amazon.com/images/I/71xoR4A6q-L._AC_SL1000_.jpg\"\r\n//     ],\r\n//     \"description\": \"Echo Dot (Geração mais recente) | O Echo Dot com o melhor som já lançado\"\r\n//   },\r\n//   {\r\n//     \"name\": \"SmartWatch\",\r\n//     \"price\": 220,\r\n//     \"imageUrls\": [],\r\n//     \"description\": \"SmartWatch, relogio smartwatch com Ecrã tátil e Alexa, à prova d'água IP68, relogio smartwatch feminino e masculino, com modo esportivo e recebimento de notificações\"\r\n//   }\r\n// ]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authToken}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}/c68bc69a-656f-4dfe-9e79-6e8ce568afc9",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}",
+								"c68bc69a-656f-4dfe-9e79-6e8ce568afc9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product User 1 (Cliente)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Monitor UltraWide LG\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}/5b412447-5580-4b72-bad8-5a6ac40982fc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}",
+								"5b412447-5580-4b72-bad8-5a6ac40982fc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product User 1 (Cliente)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}/6c921bf0-cb81-4309-bdad-736a844bf2d8",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}",
+								"6c921bf0-cb81-4309-bdad-736a844bf2d8"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							"pm.environment.set(\"context\", \"products\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Add Product To Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 1,\r\n  \"productId\": \"3191c854-7067-47ce-af60-da2c597716a2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Product Quantity",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 10,\r\n  \"productId\": \"79c97551-bfb6-414e-ab9e-37d76c448584\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List User Cart",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Cart Product",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authTokenUser1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 1,\r\n  // \"all\": true,\r\n  \"productId\": \"3191c854-7067-47ce-af60-da2c597716a2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{context}}/remove",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{context}}",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							"pm.environment.set(\"context\", \"carts\")"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}

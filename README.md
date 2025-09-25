@@ -14,6 +14,7 @@ API de e-commerce construída em NestJS com TypeORM (PostgreSQL), Redis, filas (
 - [Features e endpoints](#features-e-endpoints)
 - [Principais ferramentas](#principais-ferramentas)
 - [Features e endpoints](#features-e-endpoints)
+  - [Workspace Postman](#worspace-postman)
 - [Migrations](#migrations)
 - [Testes](#testes)
 - [Database](#database)
@@ -101,7 +102,7 @@ npm run start:dev
 
 ---
 
-## Variáveis de ambiente
+## Variaveis de ambiente
 
 **O arquivo .env.example também contém as variáveis necessárias.**
 
@@ -168,6 +169,12 @@ MAIL_PASSWORD=your_password
 ---
 
 ## Features e endpoints
+
+> #### Worspace Postman:
+>
+> _está na pasta ./assets/UxSoftware Tests.postman_collection_
+>
+> - [postman-collection.json](./assets/UxSoftware%20Tests.postman_collection.json)
 
 - **Autenticação e RBAC**
   - Login: `POST /auth/login` (retorna token JWT).
