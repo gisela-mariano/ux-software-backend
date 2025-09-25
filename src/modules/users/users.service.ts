@@ -32,6 +32,8 @@ export class UsersService {
       });
     }
 
+    delete (user as { passwordHash?: string }).passwordHash;
+
     return user;
   }
 

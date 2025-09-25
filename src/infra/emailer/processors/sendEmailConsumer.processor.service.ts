@@ -13,10 +13,12 @@ export class SendEmailConsumerProcessor {
   async handleSendOtpEmail(job: Job<SendOtpEmailHandler>) {
     const { name, email, otp, expiresIn } = job.data;
 
+    const verificationLink = `http://localhost:${process.env.API_PORT ?? 3000}/otp/verify/${email}/${otp}`;
+
     await this.mailerService.sendMail({
       to: email,
       subject: `Hello, ${name}!`,
-      text: `Hello, ${name}, welcome!\n\nYour OTP code is ${otp}. It expires in ${expiresIn / 60} minutes.`,
+      text: `Hello, ${name}, welcome!\n\nYour OTP code is ${otp}. It expires in ${expiresIn / 60} minutes.\n\nVerification link: ${verificationLink}`,
     });
   }
 
