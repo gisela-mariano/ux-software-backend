@@ -1,98 +1,285 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# UX Software Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API de e-commerce construída em NestJS com TypeORM (PostgreSQL), Redis, filas (Bull), envio de email (Mailer/Nodemailer) e documentação via Swagger. Inclui RBAC (Role-Based Access Control) básico, autenticação JWT, OTP (One-Time Password) por email, carrinho e produtos.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+### 📃 Sumário
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [Requisitos](#️requisitos)
+- [Como rodar](#como-rodar)
+  - [Via Docker](#1-via-docker-recomendado)
+  - [Local](#2-local-sem-docker)
+- [Variáveis de ambiente](#variaveis-de-ambiente)
+- [Features e endpoints](#features-e-endpoints)
+- [Principais ferramentas](#principais-ferramentas)
+- [Features e endpoints](#features-e-endpoints)
+- [Migrations](#migrations)
+- [Testes](#testes)
+- [Database](#database)
+- [Troubleshooting](#troubleshooting)
+- [Pontos de melhoria](#pontos-de-melhoria)
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## Requisitos
 
-## Compile and run the project
+- Node.js 20+
+- npm
+- Docker e Docker Compose (opcional para execução com containers)
+- PostgreSQL e Redis (se rodar localmente sem Docker)
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## Como rodar
 
-# production mode
-$ npm run start:prod
-```
+### 1) Via Docker (recomendado)
 
-## Run tests
+#### 1. Crie um arquivo `.env` na raiz (veja exemplo em [“Variáveis de ambiente”](#variaveis-de-ambiente)).
+
+#### 2. Suba os containers:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+make docker-up  ou  docker-compose up -d
+# ou, se quiser garantir rebuild de imagens
+make docker-up-build  ou  docker-compose up -d --build
 ```
 
-## Deployment
+#### 3. A API estará em `http://localhost:${API_PORT}` (veja `.env`).
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+#### 4. Documentação Swagger: `http://localhost:${API_PORT}/doc`.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+#### Para parar os containers:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+make docker-down  ou  docker-compose down
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+#### Logs do container da API:
 
-## Resources
+```bash
+make docker-logs  ou  docker logs ux-software-api
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+#### Notas:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- O serviço `api` expõe internamente a porta 3000. O mapeamento externo usa `${API_PORT}` do `.env`.
+- Postgres e Redis também são provisionados via Compose.
 
-## Support
+### 2) Local (sem Docker)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### 1. Crie um `.env` na raiz (veja exemplo em [“Variáveis de ambiente”](#variaveis-de-ambiente)).
 
-## Stay in touch
+#### 2. Instale dependências:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+make install
+# ou
+npm install
+```
 
-## License
+#### 3. Execute as migrações:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+make migrate
+# ou
+npm run migration:run
+```
+
+#### 4. Inicie em desenvolvimento:
+
+```bash
+make start
+# ou
+npm run start:dev
+```
+
+#### 5. Acesse:
+
+- API: `http://localhost:${API_PORT}` (default 3000)
+- Swagger: `http://localhost:${API_PORT}/doc`
+
+---
+
+## Variáveis de ambiente
+
+**O arquivo .env.example também contém as variáveis necessárias.**
+
+Crie um `.env` na raiz. Exemplo mínimo funcional:
+
+```bash
+# API
+API_PORT=3000
+TOKEN_EXPIRATION="1d"
+SECRET_KEY=secret_key
+
+# PostgreSQL
+# Caso esteja utilizando docker, substituir o host por 'db' -> POSTGRES_HOST=db
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=ux_software
+
+# Redis
+# Caso esteja utilizando docker, substituir o host por 'redis' -> REDIS_HOST=redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# E-mail (opcional)
+# Se qualquer uma dessas faltar, será gerada uma conta de teste (Ethereal) automaticamente.
+MAIL_FROM="UX Software <no-reply@uxsoftware.com>"
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USER=your_user
+MAIL_PASSWORD=your_password
+```
+
+### Observações:
+
+- O `DatabaseConfigService` exige: `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`.
+- `Redis` usa `REDIS_HOST` e `REDIS_PORT`.
+- `Mailer` usa `MAIL_*` mas, se faltar, gera credenciais de teste automaticamente e loga um aviso.
+
+---
+
+## Principais ferramentas
+
+- **NestJS**;
+- **TypeORM**;
+- **PostgreSQL**;
+- **Redis + @nestjs/bull (Bull)**;
+  - filas para processamento assíncrono (ex.: envio de e-mails/OTP) sem travar o request/response.
+- **@nestjs-modules/mailer + Nodemailer**:
+  - envio de e-mails;
+- **@nestjs/swagger**;
+  - documentação auto-gerada de endpoints em `/doc`.
+- **class-validator / class-transformer**;
+  - validação e transformação declarativa de DTOs.
+- **JWT (@nestjs/jwt)**;
+  - autenticação stateless.
+- **ESLint + Prettier + ts-jest + Jest**;
+  - qualidade de código e testes.
+- **Docker/Docker Compose**;
+  - padronização do ambiente (API, Postgres, Redis).
+- **Makefile**;
+  - conveniência para comandos frequentes (subir Docker, rodar migrations, etc).
+
+---
+
+## Features e endpoints
+
+- **Autenticação e RBAC**
+  - Login: `POST /auth/login` (retorna token JWT).
+  - `JwtAuthGuard` aplicado globalmente; use o decorator `@Public()` para rotas públicas.
+  - `@Roles(...)` + `PermissionGuard` para autorização baseada em role (ex.: ADMIN).
+- **Usuários (`/users`)**
+  - `POST /users`: cria usuário (público).
+  - `GET /users/:id`: obtém usuário (requer JWT).
+  - `PATCH /users`: atualiza roles do usuário autenticado (requer JWT).
+- **Produtos (`/products`)**
+  - `POST /products`: cria produtos em lote (apenas ADMIN).
+  - `GET /products/:id`: busca por id (público).
+  - `GET /products`: lista com paginação (público).
+  - `PATCH /products/:id`: atualiza (ADMIN).
+  - `DELETE /products/:id`: remove (ADMIN).
+- **Carrinho (`/carts`)**
+  - `POST /carts`: adiciona produto ao carrinho (JWT).
+  - `GET /carts`: lista carrinho do usuário (JWT, paginação).
+  - `PATCH /carts`: altera quantidade (JWT).
+  - `PATCH /carts/remove`: remove itens (JWT).
+- **OTP e e-mail**
+  - Módulo `otp` expõe endpoints para envio/validação de OTP por e-mail.
+  - Fila `SEND_OTP_EMAIL` via Bull/Redis para processamento assíncrono.
+
+**Documentação interativa:** `GET /doc`
+
+![Imagem Documentação](./assets/documentation.png)
+
+---
+
+## Migrations
+
+- Gerar migration:
+  ```bash
+  make migration-generate MIGRATION_NAME=CreateUsersTable
+  # ou
+  npm run migration:generate --name=CreateUsersTable
+  ```
+- Rodar migrations:
+  ```bash
+  make migrate
+  # ou
+  npm run migration:run
+  ```
+- Reverter última:
+  ```bash
+  make migrate-revert
+  # ou
+  npm run migration:revert
+  ```
+- Listar migrations:
+  ```bash
+  make migration-show
+  # ou
+  npm run migration:show
+  ```
+
+Obs.: O CLI do TypeORM usa `src/infra/database/datasource.ts`.
+
+---
+
+## Database
+
+- O usuário (ADMIN) poderá ter vários produtos 1:N;
+- O usuário poderá ter vários produtos no carrinho 1:N;
+- O carrinho poderá ter vários produtos 1:N.
+
+![Diagrama DB](./assets/db-diagram.png)
+
+---
+
+## Testes
+
+- Unit tests:
+  ```bash
+  make run-test
+  # ou
+  npm run test
+  ```
+- Watch:
+  ```bash
+  npm run test:watch
+  ```
+- Cobertura:
+  ```bash
+  npm run test:cov
+  ```
+- E2E:
+  ```bash
+  npm run test:e2e
+  ```
+
+---
+
+## Troubleshooting
+
+- **Erro “Config error - missing env.POSTGRES\_\*”:** faltam variáveis no `.env`. Verifique seção “Variáveis de ambiente”.
+- **Porta ocupada:**
+  - Ajuste `API_PORT`, `POSTGRES_PORT` ou `REDIS_PORT` no `.env`.
+  - Pare serviços locais de Postgres/Redis se estiver usando Docker.
+- **E-mail não enviado:**
+  - Sem `MAIL_*`, o sistema gera uma conta de testes (Ethereal) automaticamente e loga as credenciais. Use-as para visualizar e-mails.
+- **Swagger não carrega:**
+  - Confirme que a API está rodando e acesse `http://localhost:${API_PORT}/doc`.
+
+---
+
+## Pontos de melhoria
+
+- **Testes:** Deixei os testes bem básicos e só tem testes das services;
+- **Refresh Token:** Não fiz a implementação do refresh token;
+- **Filtros de rotas:** Não fiz a implementação dos filtros, como por exemplo, buscar produtos por nome, ordenar por preço...
+- **Verificação de validação do email:** Não implementei nenhuma verificação para identificar se o usuário verificou o email. Acredito que isso seja algo para ser definido nas regras de negócio, talvez nesse escopo não faça tanto sentido. Mas se tivesse a parte de checkout, por exemplo, talvez fizesse sentido, assim poderia barrar algumas ações do usuário caso ele não tivesse validado o email.
+
+---
