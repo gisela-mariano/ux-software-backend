@@ -36,6 +36,10 @@ export class DatabaseConfigService {
       EnvironmentKeys.POSTGRES_DB,
     ]);
 
+    const hostsToDisableSsl = ["localhost", "db"];
+
+    const ssl = !hostsToDisableSsl.includes(this.getValue(EnvironmentKeys.POSTGRES_HOST));
+
     return {
       type: "postgres",
       host: this.getValue(EnvironmentKeys.POSTGRES_HOST),
@@ -46,6 +50,7 @@ export class DatabaseConfigService {
       entities: [path.resolve(__dirname, "../../modules/**/*.entity{.ts,.js}")],
       migrations: [path.resolve(__dirname, "./migrations/**/*{.ts,.js}")],
       synchronize: false,
+      ssl,
     };
   }
 }

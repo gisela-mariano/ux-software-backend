@@ -10,8 +10,8 @@ import { AuthModule } from "@modules/auth/auth.module";
 import { CartsModule } from "@modules/carts/carts.module";
 import { ProductsModule } from "@modules/products/products.module";
 import { UsersModule } from "@modules/users/users.module";
-import { RedisModule } from "@nestjs-modules/ioredis";
-import { BullModule } from "@nestjs/bull";
+import { RedisModule, RedisModuleOptions } from "@nestjs-modules/ioredis";
+import { BullModule, BullRootModuleOptions } from "@nestjs/bull";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
@@ -24,11 +24,12 @@ import path from "path";
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
+      useFactory: (config: ConfigService): BullRootModuleOptions => {
         const redisService = new RedisConfigService(config);
-        const { host, port, maxRetriesPerRequest } = redisService.getRedisData();
+        const { host, port, maxRetriesPerRequest, url } = redisService.getRedisData();
 
         return {
+          url,
           redis: {
             host,
             port,
@@ -40,7 +41,7 @@ import path from "path";
     RedisModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
+      useFactory: (config: ConfigService): RedisModuleOptions => {
         const redisService = new RedisConfigService(config);
         const { type, url } = redisService.getRedisData();
 
