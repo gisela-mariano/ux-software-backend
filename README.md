@@ -10,6 +10,7 @@ API de e-commerce construída em NestJS com TypeORM (PostgreSQL), Redis, filas (
 - [Como rodar](#como-rodar)
   - [Via Docker](#1-via-docker-recomendado)
   - [Local](#2-local-sem-docker)
+  - [Online](#3-online)
 - [Variáveis de ambiente](#variaveis-de-ambiente)
 - [Features e endpoints](#features-e-endpoints)
 - [Principais ferramentas](#principais-ferramentas)
@@ -99,6 +100,10 @@ npm run start:dev
 
 - API: `http://localhost:${API_PORT}` (default 3000)
 - Swagger: `http://localhost:${API_PORT}/doc`
+
+### 3) Online
+
+Esse projeto foi publicado na vercel e está disponível na rota: https://ux-software-backend.vercel.app
 
 ---
 
